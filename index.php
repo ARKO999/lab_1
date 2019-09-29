@@ -1,62 +1,79 @@
-<!DOCTYPE html>
-<html>
+!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="uft8" />
+    <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 <?php
+function converter($sum, $from, $to)
+{
 
- $UAN = $_GET['calc_amount'];
- 
- $courses = array(
- 'usd'=>25.08,
- 'rub'=>0.41,
- 'byn'=>1.119,
- 'grn'=>1,
- 'eur'=>27.66,
- );
+    $currency = array(
+            'UAH' = array(
+'nominal' = 1,
+Курс по отношению к рублю
+'value' = 1
+)
 
+        'USD' = array(
+'nominal' = 1,
+Курс по отношению к рублю
+'value' = 25.08
+)
+'EUR' = array(
+'nominal' = 1,
+'value' = 27,66,
+),
+'RUB' = array(
+'nominal' =1,
+'value' = 0,41
+),
+'BYN' = array(
+'nominal' = 1,
+'value' =1.119,
+),
+);
+
+//Если валюты равны, то просто возвращаем сумму
+if ($from == $to)
+{
+return $sum;
+}
+
+//Если не существует элемента массива с индексом $from или $to
+if (!isset($currency[$from]) || !isset($currency[$to]))
+{
+return false;
+}
+//Считаем и возвращаем сконвертированную сумму
+return ($sum * $currency[$from]['value'] / $currency[$to]['value'])
+/ $currency[$from]['nominal'] * $currency[$to]['nominal'];
+}
 ?>
 <div class="calc_body">
-    <span>РљР°Р»СЊРєСѓР»СЏС‚РѕСЂ СЃС‚РѕРёРјРѕСЃС‚Рё</span>
+    <span>Калькулятор стоимости</span>
     <form name="calc_form" action="" id="calc_formid">
-        <label for="calc_amount">CСѓРјРјР° РІ $:</label>
+        <label for="calc_amount">Cумма в $:</label>
         <input name="calc_amount" value="1" size="4" />
         <div class="calc_clear"></div>
-        <label for="calc_rates">Р’Р°Р»СЋС‚Р°:</label>
+        <label for="calc_rates">Валюта:</label>
         <select name="calc_rates" id="ratesoption">
 
-    <?php 
-    foreach($courses as $key=>$cours){
-        echo '<option value="'.$key.'">'.strtoupper ($key).'</option>';
-    }
-    ?>
-    
+            <option value="UAH">UAH</option>
+            <option value="RUB">RUB</option>
+            <option value="USD">USD</option>
+            <option value="BYN">BYN</option>
+            <option value="EUR">EUR</option>
+
         </select>
         <div class="calc_clear"></div>
-        <input type="submit" value="Р Р°СЃС‡РµС‚" name="calc_do" class="calc_button" />
+        <input type="submit" value="Расчет" name="calc_do" class="calc_button" />
     </form>
-    <label>Р РµР·СѓР»СЊС‚Р°С‚: </label><input name="result" id="calc_result" value="" disabled="disabled" size="4" />
+    <label>Результат: </label><input name="result" id="calc_result" value="" disabled="disabled" size="4" />
     <div class="calc_clear"></div>
     <div id="calc_error"></div>
 </div>
 
-<?php 
-
-var_dump($_GET);
-
-echo ($courses[$_GET['calc_rates']]*$UAN);  ?>
-<table border="2">
-<?php 
-
-
-    foreach($courses as $key=>$cours){
-        echo '<tr><td>'.strtoupper ($key).'</td><td>'.$cours*$UAN.'</td></tr>';
-    }
-    ?>
-
-
-</table>
 </body>
 </html>
